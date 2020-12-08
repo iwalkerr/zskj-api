@@ -38,10 +38,9 @@ type redis struct {
 }
 
 type admin struct {
-	Address     string
-	WebsocketIp string
-	ServerRoot  string
-	// Swagger      string
+	Address      string
+	WebsocketIp  string
+	ServerRoot   string
 	BusinessName string
 	CompanyName  string
 }

@@ -6,8 +6,6 @@ address = ":8080"
 websocketIp = ""
 #后台服务静态资源目录
 serverRoot = "public"
-#Swagger文件地址
-# swagger = "http://127.0.0.1:8086/swagger"
 #登陆页面展示名称
 businessName = "在上邻里"
 companyName = "四川在上科技有限公司"
@@ -15,7 +13,7 @@ companyName = "四川在上科技有限公司"
 # 数据库配置
 [database]
 #主数据库
-master = "root:123456@tcp(127.0.0.1:3306)/willfish-api?charset=utf8mb4&parseTime=true&loc=Local"
+master = "root:123456@tcp(127.0.0.1:3306)/zskj_api?charset=utf8mb4&parseTime=true&loc=Local"
 #从数据库 如果为空则表示只使用主数据
 slave = ""
 
