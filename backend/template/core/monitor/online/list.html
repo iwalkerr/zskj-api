@@ -1,0 +1,158 @@
+{{define "core/monitor/online/list"}}
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    {{template "core/header" (OssUrl)}}
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <input id="ws" type="hidden" value="{{.ws}}"/>
+        <input id="userId" type="hidden" value="{{.userId}}"/>
+        <form id="menu-form">
+            <input id="ids" name="ids" type="hidden" value=""/>
+        </form>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+{{template "core/footer" (OssUrl)}}
+<script type="text/javascript">
+    var forceFlag = '{{HasPermi .uid "monitor:online:forceLogout"}}';
+    var prefix = ctx + "monitor/online";
+
+    $(function () {
+        initWebSocket() // ws
+        onlineUserList() // 在线用户表
+    });
+
+    // 在线用户表初始化
+    function onlineUserList(){
+        var options = {
+            url: prefix + "/list",
+            sortName: "login_date",
+            sortOrder: "desc",
+            showSearch: false,
+            showRefresh: false,
+            showToggle: false,
+            showColumns: false,
+            columns: [
+            {
+                field: 'user_id',
+                title: '用户ID',
+            },
+            {
+                field: 'login_name',
+                title: '登录名称',
+            },
+            {
+                field: 'user_name',
+                title: '用户名',
+            },
+            {
+                field: 'login_ip',
+                title: '主机'
+            },
+            {
+                field: 'phonenumber',
+                title: '电话号码'
+            },
+            {
+                field: 'email',
+                title: '邮箱'
+            },
+            {
+                field: 'create_by',
+                title: '创建人'
+            },
+            {
+                field: 'login_date',
+                title: '最近登录时间',
+                sortable: true,
+                formatter:function (value,row,index) {
+                    return rfc3339(value);
+                }
+            }
+        ]
+        };
+        $.table.init(options);
+    }
+
+     // 批量强退
+     function batchForceLogout() {
+        var rows = $.table.selectColumns("user_id");
+        if (rows.length == 0) {
+            $.modal.alertWarning("请选择要强退的用户");
+            return;
+        }
+        $.modal.confirm("确认要强退选中的" + rows.length + "条数据吗?", function () {
+            var url = prefix + "/batchForceLogout";
+            rows=$.common.join(rows,",");
+            var data = {"ids": rows};
+            $.operate.post(url, data);
+        });
+    }
+    
+    // 单条强退
+    function forceLogout(userId){
+        $.modal.confirm("确定要强制选中用户下线吗？", function () {
+            var data = {"id": userId};
+            $.operate.post(prefix + "/forceLogout", data);
+        })
+    }
+
+    // websocket消息监听
+    function onmessage(e){
+        let data = JSON.parse(e.data)
+        if(data.from_user==""){
+            $("#ids").val(data.content)
+            $.table.search()
+        }
+    }
+
+    let lock = false; count = 0
+    // websocket
+    function initWebSocket() {
+        // 浏览器提供了WebSocket类型，在Firefox中为MozWebSocket
+        if (window.WebSocket || window.MozWebSocket) {
+            conn()
+        } else {
+            console.log("浏览器不支持websocket")
+        }
+    }
+    function conn() {
+        //可以看到客户端JS，很容易的就通过WebSocket函数建立了一个与服务器的连接sock，当握手成功后，会触发WebScoket对象的onopen事件，告诉客户端连接已经成功建立。客户端一共绑定了四个事件。
+        let ws = new WebSocket($("#ws").val())
+        let userId = $("#userId").val()
+        // 收到消息后触发
+        ws.onmessage = onmessage
+        //建立连接后触发
+        ws.onopen = function () {
+            let obj = { from_user: userId, to_user: userId, grp_id: "", content: "ping", content_type: 1 }
+            obj = JSON.stringify(obj)
+            ws.send(obj)
+        };
+        // 关闭连接时候触发
+        ws.onclose = function (e) {
+            reconnect()
+            console.log('关闭websocket连接！')
+        };
+        //发生错误的时候触发
+        ws.onerror = function (e) { reconnect() }
+    }
+
+    // 每隔1秒重连
+    function reconnect() {
+        if (lock) return; lock = true
+        setTimeout(function () {       // 没连接上会一直重连，设置延迟避免请求过多
+            lock = false
+            // 重连50次后还没有连上，则关闭websocket
+            if (count < 50) { initWebSocket() } else count = 0
+            count++
+        }, 1000)
+    }
+</script>
+</body>
+</html>
+{{end}}

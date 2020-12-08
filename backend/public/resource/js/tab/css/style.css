@@ -1,0 +1,112 @@
+#page-wrapper {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.content-tabs {
+    position: relative;
+    height: 40px;
+    background: #fafafa;
+    line-height: 40px;
+}
+
+nav.page-tabs {
+    margin-left: 30px;
+    width: 100000px;
+    overflow: hidden;
+}
+
+.page-tabs-content {
+    float: left;
+    overflow: auto;
+}
+
+.content-tabs .roll-nav, .page-tabs-list {
+    position: absolute;
+    width: 30px;
+    height: 40px;
+    text-align: center;
+    color: #999;
+    z-index: 2;
+    top: 0;
+}
+
+.content-tabs .roll-left {
+    left: 0;
+    border-right: solid 1px #eee;
+}
+
+.content-tabs .roll-right {
+    right: 0;
+    border-left: solid 1px #eee;
+}
+
+.content-tabs button {
+    background: #fff;
+    border: 0;
+    height: 40px;
+    width: 40px;
+    outline: none;
+}
+
+.content-tabs button:hover {
+    background: #fafafa;
+}
+
+.page-tabs a {
+    display: block;
+    float: left;
+    border-right: solid 1px #eee;
+    padding: 0 15px;
+    color: #999;
+    user-select: none;
+}
+
+.page-tabs a.active {
+    background: #eaedf1 !important;
+    color: #337ab7 !important;
+}
+
+.content-tabs {
+    z-index: 101;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.roll-right.tabRight {
+    right: 60px;
+}
+
+.roll-right.btn-group {
+    right: 60px;
+    width: 80px;
+    padding: 0;
+}
+
+.roll-right.btn-group button {
+    width: 80px;
+}
+
+.roll-right.tabReload {
+    background: #fff;
+    height: 40px;
+    width: 60px;
+    outline: none;
+}
+
+/** 首页样式 **/
+.ax_close_max {
+    position: fixed;
+    top: 5px;
+    left: 5px;
+    z-index: 9999;
+    display: none;
+    color: #ccc;
+}
+
+#content-main {
+    flex:1;
+    overflow: hidden;
+}

@@ -1,0 +1,127 @@
+{{define "core/system/layout/index"}}
+<!DOCTYPE html>
+<html lang="en">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta charset="utf-8"/>
+    <meta name="description" content="User login page"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+    <title>{{.systemName}}</title>
+    <link href="{{OssUrl}}/resource/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="{{OssUrl}}/resource/ajax/libs/ace/font-awesome/css/font-awesome.min.css" rel="stylesheet"/>
+    <link href="{{OssUrl}}/resource/ajax/libs/ace/css/ace.min.css" rel="stylesheet"/>
+    <link href="{{OssUrl}}/resource/ajax/libs/ace/css/jquery.gritter.min.css" rel="stylesheet"/>
+    <link href="{{OssUrl}}/resource/xframe/css/xf-ui.css" rel="stylesheet"/>
+
+    <script type="text/javascript" src="{{OssUrl}}/resource/js/jquery.min.js"></script>
+<body class="no-skin">
+{{template "core/system/layout/header" .}}
+<div class="main-container ace-save-state" id="main-container">
+    <input id="userId" type="hidden" value="{{.user.UserId}}"/>
+    <input id="websocketConn" type="hidden" value="{{.ws}}"/>
+    <script type="text/javascript">
+        try {ace.settings.loadState('main-container')} catch (e) {}
+    </script>
+    <!-- 左边 -->
+    {{template "core/system/layout/lefter" .}}
+    
+    <div class="main-content">
+        <div class="main-content-inner">
+            <div class="page-content">
+                <div id="page-wrapper" class="row">
+                    <!-- right-menu -->
+                    <div id="right-menu" class="modal aside" data-body-scroll="false" data-offset="true" data-placement="right" data-fixed="true" data-backdrop="false" tabindex="-1">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header no-padding">
+                                    <div class="table-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                            <span class="white">&times;</span>
+                                        </button>
+                                        时时在线查看平板信息
+                                    </div>
+                                </div>
+                                <div class="modal-body">
+                                    <h3 class="lighter">连接<span class="red">10</span>台平板信息</h3>
+                                    <br/>
+                                    打分裁判 - 张三
+                                    <br/>
+                                    <br/>
+                                    裁判长 - 李四
+                                    <br/>
+                                    <br/>
+                                    打分裁判 - 张三
+                                    <br/>
+                                    <br/>
+                                    打分裁判 - 张三
+                                    <br/>
+                                    <br/>
+                                    打分裁判 - 张三
+                                    <br/>
+                                    <br/>
+                                    打分裁判 - 张三
+                                    <br/>
+                                    <br/>
+                                    打分裁判 - 张三
+                                    <br/>
+                                    <br/>
+                                    打分裁判 - 张三
+                                    <br/>
+                                    <br/>
+                                    打分裁判 - 张三
+                                    <br/>
+                                    <br/>
+                                    打分裁判 - 张三
+                                </div>
+                            </div><!-- /.modal-content -->
+                            <button class="aside-trigger btn btn-info btn-app btn-xs ace-settings-btn" data-target="#right-menu" data-toggle="modal" type="button">
+                                <i data-icon1="fa-plus" data-icon2="fa-minus" class="ace-icon fa fa-plus bigger-110 icon-only"></i>
+                            </button>
+                        </div><!-- /.modal-dialog -->
+                    </div>
+
+                    {{template "core/system/layout/tab" .}}
+                    <div class="mainContent" id="content-main">
+                        <iframe class="xframe" name="iframe0" width="100%" height="100%" data-id="/system/default_main" src="/system/default_main" frameborder="0" seamless></iframe>
+                    </div><!-- /.col -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="{{OssUrl}}/resource/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="{{OssUrl}}/resource/ajax/libs/ace/js/ace.min.js"></script>
+<script type="text/javascript" src="{{OssUrl}}/resource/ajax/libs/ace/js/ace-elements.min.js"></script>
+<script type="text/javascript" src="{{OssUrl}}/resource/js/fullscreen.js"></script>
+<script type="text/javascript" src="{{OssUrl}}/resource/xframe/ws.js"></script>
+<script type="text/javascript" src="{{OssUrl}}/resource/xframe/index.js"></script>
+<script type="text/javascript" src="{{OssUrl}}/resource/ajax/libs/ace/js/jquery.gritter.min.js"></script>
+
+<script type="text/javascript">
+    jQuery(function ($) {
+        // 左边侧拉栏
+        $('.modal.aside').ace_aside();
+        $(document).one('ajaxloadstart.page', function (e) {
+            //in ajax mode, remove before leaving page
+            $('.modal.aside').remove();
+            $(window).off('.aside')
+        });
+        
+        // 顶部弹出通知
+        //$('#right-menu > .modal-dialog').resizable({handles: "w", grid: [ 20, 0 ], minWidth: 200, maxWidth: 600});
+        $('#gritter-regular').on(ace.click_event, function () {
+            $.gritter.add({
+                title: '这是定期通知!',
+                text: 'This will fade out after a certain amount of time. Vivamus eget tincidunt velit. Cum sociis natoque penatibus et <a href="#" class="blue">magnis dis parturient</a> montes, nascetur ridiculus mus.',
+                image: '{{OssUrl}}/resource/ajax/libs/ace/images/avatar1.png', //in Ace demo ./dist will be replaced by correct assets path
+                sticky: true, // 是否永久显示
+                time: '',
+                class_name: 'gritter-light',
+            });
+            return false;
+        });
+    });
+</script>
+</body>
+</html>
+{{end}}

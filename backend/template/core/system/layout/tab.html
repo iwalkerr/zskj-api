@@ -1,0 +1,67 @@
+{{define "core/system/layout/tab"}}
+<link rel="stylesheet" href="{{OssUrl}}/resource/js/tab/css/style.css"/>
+<link rel="stylesheet" href="{{OssUrl}}/resource/js/tab/css/jquery.contextMenu.min.css"/>
+<style>
+    .content-tabs a:hover {text-decoration: none;background: #f2f2f2;cursor: pointer;color: #337ab7;}
+</style>
+
+<div class="row content-tabs">
+    <button class="roll-nav roll-left tabLeft">
+        <i class="fa fa-backward"></i>
+    </button>
+    <nav class="page-tabs menuTabs">
+        <div class="page-tabs-content">
+            <a href="javascript:;" class="active menuTab" id="refresh0Tab" data-id="/system/default_main">首页</a>
+        </div>
+    </nav>
+    <button class="roll-nav roll-right tabRight">
+        <i class="fa fa-forward"></i>
+    </button>
+    <a href="javascript:void(0);" class="roll-nav roll-right tabReload"><i class="fa fa-refresh"></i> 刷新</a>
+</div>
+
+<div style="background-color: #438eb9; height: 1px; width: 100%;"></div>
+
+<script type="text/javascript" src="{{OssUrl}}/resource/js/tab/js/jquery.contextMenu.min.js"></script>
+<script src="{{OssUrl}}/resource/ajax/libs/blockUI/jquery.blockUI.js"></script>
+<script type="text/javascript" src="{{OssUrl}}/resource/xframe/js/xf-ui.js"></script>
+<script type="text/javascript" src="{{OssUrl}}/resource/js/tab/js/tab.js"></script>
+<script>
+    // 刷新首页tab
+    $("#refresh0Tab").on("click",function(e){
+        let url = $(this).attr("data-id");
+        let target = $('.xframe[data-id="' + url + '"]');
+        target.attr('src', url).ready();
+    })
+
+    // history（表示去掉地址的#）否则地址以"#"形式展示
+    let mode = "history";
+    // 历史访问路径缓存
+    let historyPath = storage.get("historyPath");
+    // 排除非左侧菜单链接
+    let excludesUrl = ["/system/user/profile"];
+
+    $(function () {
+        if ($.common.equals("history", mode) && window.performance.navigation.type == 1) {
+            let url = storage.get('publicPath');
+            if ($.common.isNotEmpty(url)) {
+                applyPath(url);
+            }
+        } else {
+            let hash = location.hash;
+            if ($.common.isNotEmpty(hash)) {
+                let url = hash.substring(1, hash.length);
+                applyPath(url);
+            }
+        }
+    });
+
+    /** 刷新时访问路径页签 */
+    function applyPath(url) {
+        $('a[href$="' + decodeURI(url) + '"]').click();
+        if ($.inArray(url, excludesUrl)) {
+            $('a[href$="' + url + '"]').parent("li").addClass("active").parents("li").addClass("active").end().parents("ul").addClass("in");
+        }
+    }
+</script>
+{{end}}

@@ -1,0 +1,281 @@
+{{define "core/system/menu/edit"}}
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    {{template "core/header" (OssUrl)}}
+    <style>
+        .btnColor{color: white;padding:3px 8px;border-radius: 15px;cursor: pointer;}
+        .btnColor:hover{text-decoration:none;}
+    </style>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-menu-edit">
+        <input id="msg" type="hidden" value="{{.msg}}"/>
+        <input id="menuId" name="menuId" type="hidden" value="{{.menu.MenuId}}"/>
+        <input id="treeId" name="parentId" type="hidden" value="{{.menu.ParentId}}"/>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">系统类型：</label>
+            <div class="col-sm-8">
+                <label class="radio-box"> <input type="radio" {{if eq .menu.SysType "2"}}checked{{end}} name="sysType" value="2"/> 系统菜单</label>
+                <label class="radio-box"> <input type="radio" {{if eq .menu.SysType "1"}}checked{{end}} name="sysType" value="1"/> 业务菜单 </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label ">上级菜单：</label>
+            <div class="col-sm-8">
+                <div class="input-group">
+                    <input class="form-control" type="text" onclick="selectMenuTree()" id="treeName" readonly="true" value="{{if eq (len .menu.ParentName) 0}}无{{else}}{{.menu.ParentName}}{{end}}">
+                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">菜单类型：</label>
+            <div class="col-sm-8">
+                <label class="radio-box"> <input type="radio" {{if eq .menu.MenuType "M"}}checked{{end}} name="menuType" value="M"/> 目录</label>
+                <label class="radio-box"> <input type="radio" {{if eq .menu.MenuType "C"}}checked{{end}} name="menuType" value="C"/> 菜单 </label>
+                <label class="radio-box"> <input type="radio" {{if eq .menu.MenuType "F"}}checked{{end}} name="menuType" value="F"/> 按钮 </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">菜单名称：</label>
+            <div class="col-sm-8">
+                <input class="form-control" type="text" name="menuName" id="menuName" value="{{.menu.Name}}" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">请求地址：</label>
+            <div class="col-sm-8">
+                <input id="url" name="url" class="form-control" type="text" value="{{.menu.Url}}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">权限标识：</label>
+            <div class="col-sm-8">
+                <input id="perms" name="perms" class="form-control" type="text" value="{{.menu.Perms}}">
+                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 控制器中定义的权限标识，如：@RequiresPermissions("")</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">显示排序：</label>
+            <div class="col-sm-8">
+                <input class="form-control" type="text" name="orderNum" value="{{if ne .menu.SortId 0}}{{.menu.SortId}}{{end}}" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">图标：</label>
+            <div class="col-sm-8">
+                <input id="icon" name="icon" class="form-control" type="text" placeholder="选择图标" value="{{.menu.Icon}}">
+                <div class="ms-parent" style="width: 100%;">
+                    <div class="icon-drop animated flipInX" style="display: none;max-height:200px;overflow-y:auto">
+                        <div>
+                            {{template "core/system/menu/icon"}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">颜色：</label>
+            <div class="col-sm-8">
+                <input id="iconColor" name="color" class="form-control" type="text" placeholder="选择颜色" value="{{.menu.Color}}">
+                <div style="margin-top: 10px;">
+                    <a type="button" onclick="setMenuColor('black');" class="btnColor" style="background-color: black;">黑色</a>
+                    <a type="button" onclick="setMenuColor('red');" class="btnColor" style="background-color: red;">红色</a>
+                    <a type="button" onclick="setMenuColor('green');" class="btnColor" style="background-color: green;">绿色</a>
+                    <a type="button" onclick="setMenuColor('orange');" class="btnColor" style="background-color: orange;">橘色</a>
+                    <a type="button" onclick="setMenuColor('purple');" class="btnColor" style="background-color: purple;">紫色</a>
+                    <a type="button" onclick="setMenuColor('pink');" class="btnColor" style="background-color: pink;">粉红色</a>
+                    <a type="button" onclick="setMenuColor('blue');" class="btnColor" style="background-color: blue;">蓝色</a>
+                    <a type="button" onclick="setMenuColor('grey');" class="btnColor" style="background-color: grey;">灰色</a>
+                    <a type="button" onclick="setMenuColor('brown');" class="btnColor" style="background-color: brown;">褐色</a>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">菜单状态：</label>
+            <div class="col-sm-8">
+                {{DictRadio "004" "visible" .menu.Visible}}
+            </div>
+        </div>
+    </form>
+</div>
+{{template "core/footer" (OssUrl)}}
+<script>
+    var prefix = ctx + "system/menu";
+
+    $(function () {
+        var menuType = $('input[name="menuType"]:checked').val();
+        menuVisible(menuType);
+    });
+
+    if($("#msg").val()){
+        $("#form-menu-edit").validate({
+            onkeyup: false,
+            rules: {
+                sysType: {
+                    required: true,
+                },
+                menuType: {
+                    required: true,
+                },
+                menuName: {
+                    remote: {
+                        url: prefix + "/checkMenuNameUnique",
+                        type: "post",
+                        dataType: "json",
+                        data: {
+                            "menuId": function () {
+                                return $("#menuId").val();
+                            },
+                            "parentId": function () {
+                                return $("input[name='parentId']").val();
+                            },
+                            "menuName": function () {
+                                return $.common.trim($("#menuName").val());
+                            }
+                        },
+                        dataFilter: function (data, type) {
+                            return $.validate.unique(data);
+                        }
+                    }
+                },
+                icon: {
+                    required: true,
+                },
+                iconColor: {
+                    required: true,
+                },
+                orderNum: {
+                    digits: true
+                },
+            },
+            messages: {
+                "menuName": {
+                    remote: "菜单已经存在"
+                }
+            },
+            focusCleanup: true
+        });
+    }else{
+        $("#form-menu-edit").validate({
+            onkeyup: false,
+            rules: {
+                menuType: {
+                    required: true,
+                },
+                menuName: {
+                    remote: {
+                        url: prefix + "/checkMenuNameUniqueAll",
+                        type: "post",
+                        dataType: "json",
+                        data: {
+                            "parentId": function () {
+                                return $("input[name='parentId']").val();
+                            },
+                            "menuName": function () {
+                                return $.common.trim($("#menuName").val());
+                            }
+                        },
+                        dataFilter: function (data, type) {
+                            return $.validate.unique(data);
+                        }
+                    }
+                },
+                orderNum: {
+                    digits: true
+                },
+            },
+            messages: {
+                "menuName": {
+                    remote: "菜单已经存在"
+                }
+            },
+            focusCleanup: true
+        });
+    }
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            var msg=$("#msg").val();
+            msg = msg==""?"add":msg;
+            $.operate.save(prefix + "/"+msg, $('#form-menu-edit').serialize());
+        }
+    }
+
+    $(function () {
+        $("input[name='icon']").focus(function () {
+            $(".icon-drop").show();
+        });
+        $("#form-menu-edit").click(function (event) {
+            var obj = event.srcElement || event.target;
+            if (!$(obj).is("input[name='icon']")) {
+                $(".icon-drop").hide();
+            }
+        });
+        $(".icon-drop").find(".ico-list i").on("click",
+            function () {
+                $('#icon').val($(this).attr('class'));
+            });
+        $('input').on('ifChecked',
+            function (event) {
+                var menuType = $(event.target).val();
+                menuVisible(menuType);
+            });
+    });
+
+    function menuVisible(menuType) {
+        if (menuType == "M") {
+            $("#url").parents(".form-group").hide();
+            $("#perms").parents(".form-group").hide();
+            $("#icon").parents(".form-group").show();
+            $("#iconColor").parents(".form-group").show();
+            $("input[name='visible']").parents(".form-group").show();
+        } else if (menuType == "C") {
+            $("#url").parents(".form-group").show();
+            $("#perms").parents(".form-group").show();
+            $("#icon").parents(".form-group").show();
+            $("#iconColor").parents(".form-group").show();
+            $("input[name='visible']").parents(".form-group").show();
+        } else if (menuType == "F") {
+            $("#url").parents(".form-group").show();
+            $("#perms").parents(".form-group").show();
+            $("#icon").parents(".form-group").hide();
+            $("#iconColor").parents(".form-group").hide();
+            $("input[name='visible']").parents(".form-group").hide();
+        }
+    }
+
+    /*菜单管理-修改-选择菜单树*/
+    function selectMenuTree() {
+        var menuId = $("#menuId").val();
+        if (menuId > 0) {
+            var url = prefix + "/selectMenuTree?menuId=" + menuId;
+            var options = {
+                title: '菜单选择',
+                width: "380",
+                url: url,
+                callBack: doSubmit
+            };
+            $.modal.openOptions(options);
+        } else {
+            $.modal.alertError("主菜单不能选择");
+        }
+    }
+
+    function doSubmit(index, layero) {
+        var body = layer.getChildFrame('body', index);
+        $("#menuId").val(body.find('#treeId').val());
+        $("#treeName").val(body.find('#treeName').val());
+        layer.close(index);
+    }
+
+    // 设置菜单颜色
+    function setMenuColor(color){
+        $("#iconColor").val(color)
+    }
+</script>
+</body>
+</html>
+{{end}}
