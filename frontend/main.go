@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	_ "xframe/frontend/core"
 	_ "xframe/frontend/public/swagger"
 	"xframe/pkg/server"
@@ -21,6 +21,6 @@ func main() {
 	api.Start(&g)
 
 	if err := g.Wait(); err != nil {
-		fmt.Println(err.Error())
+		log.Println(err.Error())
 	}
 }
