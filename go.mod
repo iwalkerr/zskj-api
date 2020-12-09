@@ -38,6 +38,7 @@ require (
 	github.com/quasoft/memstore v0.0.0-20191010062613-2bce066d2b0b
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/shirou/gopsutil v3.20.11+incompatible
+	github.com/streadway/amqp v1.0.0
 	github.com/swaggo/gin-swagger v1.3.0
 	github.com/swaggo/swag v1.6.9
 	github.com/xuri/efp v0.0.0-20201016154823-031c29024257 // indirect
