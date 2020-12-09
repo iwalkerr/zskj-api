@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"xframe/frontend/config"
 	_ "xframe/frontend/core"
 	_ "xframe/frontend/public/swagger"
 	"xframe/pkg/server"
@@ -16,7 +17,7 @@ func main() {
 	gin.SetMode(gin.DebugMode)
 
 	// API服务
-	api := server.New("api", ":8086", gin.Recovery(), gin.Logger())
+	api := server.New("api", config.ServerPort, gin.Recovery(), gin.Logger())
 	api.Static("public")
 	api.Start(&g)
 

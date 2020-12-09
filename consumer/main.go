@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
-	"xframe/frontend/config"
+	"xframe/consumer/config"
 	"xframe/pkg/rabbitmq"
 	"xframe/pkg/server"
 
@@ -17,11 +17,11 @@ var g errgroup.Group
 // rabbitmq消费信息
 func main() {
 	// 监听消息队列
-	rabbitmq.NewRabbitMQSimple(config.MQURL, "zs_product").ConsumeSimple(consumeSimple)
+	rabbitmq.NewRabbitMQSimple(config.MQURL, config.MQQueueName).ConsumeSimple(consumeSimple)
 
 	gin.SetMode(gin.ReleaseMode)
 	// API服务
-	api := server.New("consumer", ":8085", gin.Recovery())
+	api := server.New("consumer", config.ServerPort, gin.Recovery())
 	api.Start(&g)
 
 	if err := g.Wait(); err != nil {
