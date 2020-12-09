@@ -293,7 +293,7 @@ func AddSave(c *gin.Context, req *model.AddReq) int {
 	r.Remark = req.Remark
 	r.CreateTime = time.Now()
 	r.DelFlag = "0"
-	r.DataScope = "1"
+	r.DataScope = "5"
 
 	user := userService.GetProfile(c)
 	if user != nil {

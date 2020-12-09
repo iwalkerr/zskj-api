@@ -17,7 +17,7 @@ const (
 	selectRecordById       = `select role_id,role_name,role_key,role_sort,data_scope,status,remark from sys_role where role_id=?`
 	checkRoleKeyUnique     = `select count(role_id) from sys_role where role_key=? and role_id<>?`
 	checkRoleNameUnique    = `select count(role_id) from sys_role where role_name=? and role_id<>?`
-	editSave               = `update sys_role set role_name=?,role_key=?,status=?,remark=?,update_time=?,create_by=?,role_sort=? where role_id=?`
+	editSave               = `update sys_role set role_name=?,role_key=?,status=?,remark=?,update_time=?,create_by=?,role_sort=?,data_scope=? where role_id=?`
 	delRoleMenuById        = `delete from sys_role_menu where role_id=?`
 	changeStatus           = `update sys_role set status=? where role_id=?`
 	deleteBatch            = `delete from sys_role where role_id in (%s)`
@@ -146,7 +146,7 @@ func DelRoleMenuById(tx *sql.Tx, roleId int) error {
 }
 
 func (e *Entity) EditSave(tx *sql.Tx) error {
-	_, err := tx.Exec(editSave, e.RoleName, e.RoleKey, e.Status, e.Remark, e.UpdateTime, e.CreateBy, e.RoleSort, e.RoleId)
+	_, err := tx.Exec(editSave, e.RoleName, e.RoleKey, e.Status, e.Remark, e.UpdateTime, e.CreateBy, e.RoleSort, e.DataScope, e.RoleId)
 	if err != nil {
 		_ = tx.Rollback()
 	}
