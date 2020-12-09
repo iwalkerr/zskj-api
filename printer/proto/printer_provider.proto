@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+option java_package = "cn.grpc.service.pdfprint";
+
+service DdfPrintProvider {
+    rpc goPtPdf(RequestParam) returns (Message) {}
+}
+
+// 参数定义
+message RequestParam {
+    string printerName = 1;
+    string dpfPath = 2;
+}
+
+// 返回信息定义
+message Message {
+    int64 code = 1;
+    string msg = 2;
+}
