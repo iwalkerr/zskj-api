@@ -1,1 +1,1 @@
-wrk -t80 -c2000 -d30s --latency http://127.0.0.1:8082/validate/v1/product/
+wrk -t80 -c2000 -d30s --latency http://127.0.0.1:8082/validate/v1/check/

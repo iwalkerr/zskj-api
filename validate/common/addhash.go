@@ -120,8 +120,7 @@ func (m *AccessControl) GetDataFromMap(uid string) (isOk bool) {
 }
 
 func GetDataFromOtherMap(host string, c *gin.Context) bool {
-	// http://127.0.0.1:8084/getone/v1/product
-	hosturl := "http://" + host + ":8082" + "/validate/v1/product/checkRight"
+	hosturl := "http://" + host + ":8082" + "/validate/v1/check/right"
 	response, body, err := GetCurl(hosturl, c)
 	if err != nil {
 		return false
