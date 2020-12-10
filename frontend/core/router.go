@@ -1,13 +1,13 @@
 package core
 
 import (
-	orders "xframe/frontend/core/orders/handler"
-	product "xframe/frontend/core/product/handler"
-	seller "xframe/frontend/core/seller/handler"
-	shoppingcart "xframe/frontend/core/shoppingcart/handler"
-	teams "xframe/frontend/core/teams/handler"
+	orders "xframe/frontend/core/orders/apis"
+	product "xframe/frontend/core/product/apis"
+	seller "xframe/frontend/core/seller/apis"
+	shoppingcart "xframe/frontend/core/shoppingcart/apis"
+	teams "xframe/frontend/core/teams/apis"
 	_ "xframe/frontend/core/tool"
-	user "xframe/frontend/core/user/handler"
+	user "xframe/frontend/core/user/apis"
 	"xframe/pkg/router"
 )
 

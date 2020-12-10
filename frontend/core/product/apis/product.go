@@ -1,4 +1,4 @@
-package handler
+package apis
 
 import "github.com/gin-gonic/gin"
 
