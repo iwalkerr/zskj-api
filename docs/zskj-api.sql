@@ -101,7 +101,7 @@ CREATE TABLE `sys_dict` (
   `update_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `remark` varchar(255) DEFAULT '',
   PRIMARY KEY (`dict_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- ----------------------------
 -- Records of sys_dict
