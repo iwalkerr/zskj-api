@@ -3,33 +3,33 @@ package logic
 import "xframe/frontend/core/seller/dao"
 
 // 用户接口
-type iSellerService interface {
+type SellerService interface {
 	GetAllSeller() []*dao.Entity
 	DeleteSellerById(id int) error
 	UpdateSeller(id int) error
 }
 
-func New() iSellerService {
-	return &SellerService{dao.Entity{}}
+func New() SellerService {
+	return &sellerService{&dao.Entity{}}
 }
 
-type SellerService struct {
-	dao dao.Entity
+type sellerService struct {
+	dao *dao.Entity
 }
 
-func (u *SellerService) GetAllSeller() []*dao.Entity {
+func (u *sellerService) GetAllSeller() []*dao.Entity {
 	return u.dao.SelectAll()
 }
 
-func (u *SellerService) DeleteSellerById(id int) error {
+func (u *sellerService) DeleteSellerById(id int) error {
 	return u.dao.DeleteByKey(id)
 }
 
-func (u *SellerService) InsertSeller() (int, error) {
+func (u *sellerService) InsertSeller() (int, error) {
 	u.dao.SellerId = 1
 	return u.dao.Insert()
 }
 
-func (u *SellerService) UpdateSeller(id int) error {
+func (u *sellerService) UpdateSeller(id int) error {
 	return u.dao.UpdateByKey(id)
 }

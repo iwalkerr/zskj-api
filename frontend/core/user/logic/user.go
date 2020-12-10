@@ -5,18 +5,18 @@ import (
 )
 
 // 用户接口
-type iUserService interface {
+type UserService interface {
 	GetAllUser() []*dao.Entity
 	DeleteUserById(id int) error
 	UpdateUser(id int) error
 }
 
-func New() iUserService {
-	return &userService{dao.Entity{}}
+func New() UserService {
+	return &userService{&dao.Entity{}}
 }
 
 type userService struct {
-	dao dao.Entity
+	dao *dao.Entity
 }
 
 func (u *userService) GetAllUser() []*dao.Entity {
