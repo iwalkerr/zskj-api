@@ -1,13 +1,12 @@
 package redis
 
 import (
-	"xframe/backend/common/cfg"
+	"xframe/frontend/config"
 	"xframe/pkg/cache"
 
 	"github.com/go-redis/redis"
 )
 
 func Conn() *redis.Client {
-	r := cfg.Instance().Redis
-	return cache.Redis(r.Host, r.Password)
+	return cache.Redis(config.RedisHost, config.RedisPwd)
 }

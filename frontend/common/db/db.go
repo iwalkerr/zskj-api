@@ -1,7 +1,7 @@
 package db
 
 import (
-	"xframe/backend/common/cfg"
+	"xframe/frontend/config"
 	"xframe/pkg/db"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -10,6 +10,5 @@ import (
 
 // 获取连接
 func Conn(dbType ...int) *sqlx.DB {
-	config := cfg.Instance()
-	return db.Instance(config.Database.Master, config.Database.Slave).Engine(dbType...)
+	return db.Instance(config.MysqlMaster, config.MysqlSlave).Engine(dbType...)
 }
