@@ -3,5 +3,107 @@
     "info": {
         "contact": {}
     },
-    "paths": {}
+    "paths": {
+        "/api/v1/user/login": {
+            "post": {
+                "description": "用户通过手机app登陆",
+                "consumes": [
+                    "application/x-www-form-urlencoded"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户模块"
+                ],
+                "summary": "APP登陆接口",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "default": "zhangsan",
+                        "description": "登陆用户名或手机号",
+                        "name": "username",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "default": "12345678",
+                        "description": "密码",
+                        "name": "password",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.CommonRes"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/user/register": {
+            "post": {
+                "description": "用户通过手机app注册",
+                "consumes": [
+                    "application/x-www-form-urlencoded"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户模块"
+                ],
+                "summary": "APP注册接口",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "default": "13881887710",
+                        "description": "登陆手机号码",
+                        "name": "phone",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "default": "12345678",
+                        "description": "密码",
+                        "name": "password",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.CommonRes"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "response.CommonRes": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "响应编码 0 成功 500 错误 403 无权限  -1  失败",
+                    "type": "integer"
+                },
+                "data": {
+                    "description": "数据内容",
+                    "type": "object"
+                },
+                "msg": {
+                    "description": "消息",
+                    "type": "string"
+                }
+            }
+        }
+    }
 }

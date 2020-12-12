@@ -1,6 +1,7 @@
 package dao
 
 import (
+	"fmt"
 	"xframe/frontend/common/db"
 )
 
@@ -10,11 +11,12 @@ const (
 	updateByKey      = ``
 	selectByKey      = ``
 	selectAll        = ``
-	getPwdByUsername = `SELECT user_id,password FROM api_users WHERE real_name=?`
+	getPwdByUsername = `SELECT name,head_picture,real_name,signature,sex,birthday,password,user_id,phone FROM api_users WHERE real_name=? or phone=?`
 )
 
-func (p *Entity) GetPwdByUsername(realname string) (userId, pwd string) {
-	_ = db.Conn(1).QueryRow(getPwdByUsername, realname).Scan(&userId, &pwd)
+func (p *Entity) GetPwdByUsername(realname string) (e LoginResp) {
+	err := db.Conn(1).QueryRowx(getPwdByUsername, realname, realname).StructScan(&e)
+	fmt.Println(err)
 	return
 }
 

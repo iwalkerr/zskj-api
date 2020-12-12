@@ -2,7 +2,7 @@ package logic
 
 import (
 	"errors"
-	"fmt"
+	"strconv"
 	"strings"
 	"xframe/frontend/config"
 	"xframe/frontend/core/user/dao"
@@ -13,7 +13,7 @@ import (
 // 用户接口
 type UserService interface {
 	// 用户登陆验证
-	LoginUser(param *dao.Login) (string, error)
+	LoginUser(param *dao.Login) (*dao.LoginResp, string, error)
 	// 用户注册
 	GetAllUser() []*dao.Entity
 	DeleteUserById(id int) error
@@ -29,27 +29,25 @@ type userService struct {
 }
 
 // 用户登陆验证
-func (u *userService) LoginUser(param *dao.Login) (string, error) {
+func (u *userService) LoginUser(param *dao.Login) (*dao.LoginResp, string, error) {
 	// 1.根据用户名查询
-	userId, pwd := u.dao.GetPwdByUsername(param.Username)
+	user := u.dao.GetPwdByUsername(param.Username)
 
-	// 2.加密规则
+	// 2.加密规则s
 	enPwd := param.Username + param.Password + config.UserSalt
 	enPwd = gmd5.MustEncryptString(enPwd)
 
-	if strings.Compare(pwd, enPwd) != 0 {
-		return "", errors.New("用户名密码错误")
+	if strings.Compare(user.Password, enPwd) != 0 {
+		return nil, "", errors.New("用户名密码错误")
 	}
 
 	// 3.加密数据
-	jwtString, err := token.New(userId, config.OutTime, config.RefreshTime).CreateToken(config.JwtEncryptKey)
+	jwtString, err := token.New(strconv.Itoa(user.UserId), config.OutTime, config.RefreshTime).CreateToken(config.JwtEncryptKey)
 	if err != nil {
-		return "", errors.New("token生成错误")
+		return nil, "", errors.New("token生成错误")
 	}
 
-	fmt.Println(jwtString)
-
-	return jwtString, nil
+	return &user, jwtString, nil
 }
 
 func (u *userService) GetAllUser() []*dao.Entity {

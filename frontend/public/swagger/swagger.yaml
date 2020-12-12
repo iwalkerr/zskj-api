@@ -1,4 +1,73 @@
+definitions:
+  response.CommonRes:
+    properties:
+      code:
+        description: 响应编码 0 成功 500 错误 403 无权限  -1  失败
+        type: integer
+      data:
+        description: 数据内容
+        type: object
+      msg:
+        description: 消息
+        type: string
+    type: object
 info:
   contact: {}
-paths: {}
+paths:
+  /api/v1/user/login:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: 用户通过手机app登陆
+      parameters:
+      - default: zhangsan
+        description: 登陆用户名或手机号
+        in: formData
+        name: username
+        required: true
+        type: string
+      - default: "12345678"
+        description: 密码
+        in: formData
+        name: password
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.CommonRes'
+      summary: APP登陆接口
+      tags:
+      - 用户模块
+  /api/v1/user/register:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: 用户通过手机app注册
+      parameters:
+      - default: "13881887710"
+        description: 登陆手机号码
+        in: formData
+        name: phone
+        required: true
+        type: string
+      - default: "12345678"
+        description: 密码
+        in: formData
+        name: password
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.CommonRes'
+      summary: APP注册接口
+      tags:
+      - 用户模块
 swagger: "2.0"

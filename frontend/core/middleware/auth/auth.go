@@ -43,7 +43,7 @@ func jWTAuth(c *gin.Context, jwt string) error {
 	if err != nil {
 		return err
 	}
-	// 将当前请求的uid信息保存到请求的上下文c上
+	// 将当前请求的uid信息保存到请求的上下文上
 	c.Set("uid", t.Claim.StandardClaims.Id)
 	//判断是否有新的token生成
 	if t.NewToken != "" {

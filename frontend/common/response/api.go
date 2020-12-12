@@ -2,6 +2,7 @@ package response
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"xframe/frontend/common/rsa"
 
@@ -87,6 +88,7 @@ func (resp *ApiResp) JSON() {
 
 //设置刷新token
 func setNt(c *gin.Context, data gin.H) string {
+	fmt.Println(data["nt"], "--------")
 	data["nt"] = c.GetString("nt")
 	bytes, err := json.Marshal(data)
 	if err != nil {

@@ -12,7 +12,16 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// 用户登陆
+// @Tags 用户模块
+// @Title 用户登陆
+// @Summary APP登陆接口
+// @Description 用户通过手机app登陆
+// @Accept x-www-form-urlencoded
+// @Produce json
+// @Param username formData string true "登陆用户名或手机号" default(zhangsan)
+// @Param password formData string true "密码" default(12345678)
+// @Success 200 {object} response.CommonRes
+// @Router /api/v1/user/login [post]
 func Login(c *gin.Context) {
 	var req dao.Login
 	if err := c.ShouldBind(&req); err != nil {
@@ -20,15 +29,33 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	if encrypt, err := userLogic.New().LoginUser(&req); err != nil {
+	if user, encrypt, err := userLogic.New().LoginUser(&req); err != nil {
 		response.Error(c).Msg(err.Error()).JSON()
 	} else {
-		response.Success(c).Data(gin.H{"encrypt": encrypt}).JSON()
+		response.Success(c).Data(gin.H{"user": user, "token": encrypt}).JSON()
 	}
 }
 
-// 注册
+// @Tags 用户模块
+// @Title 用户注册
+// @Summary APP注册接口
+// @Description 用户通过手机app注册
+// @Accept x-www-form-urlencoded
+// @Produce json
+// @Param phone formData string true "登陆手机号码" default(13881887710)
+// @Param password formData string true "密码" default(12345678)
+// @Success 200 {object} response.CommonRes
+// @Router /api/v1/user/register [post]
 func Register(c *gin.Context) {
+	var req dao.Register
+	if err := c.ShouldBind(&req); err != nil {
+		response.Error(c).Msg("参数错误").JSON()
+		return
+	}
+
+	fmt.Println(req)
+
+	response.Success(c).JSON()
 
 }
 

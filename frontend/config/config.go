@@ -23,7 +23,7 @@ const (
 const (
 	JwtEncryptKey = "djhuiflrf8832cfvldsbkbsdwqwla1wshk3999sd"
 	OutTime       = 3600 * 24 * 30 // 过期时间30天
-	RefreshTime   = 1              // 刷新时间
+	RefreshTime   = OutTime / 2    // 刷新时间
 )
 
 // app与服务器较密文件
