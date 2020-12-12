@@ -1,12 +1,22 @@
 package dao
 
-const (
-	insert      = ``
-	deleteByKey = ``
-	updateByKey = ``
-	selectByKey = ``
-	selectAll   = ``
+import (
+	"xframe/frontend/common/db"
 )
+
+const (
+	insert           = ``
+	deleteByKey      = ``
+	updateByKey      = ``
+	selectByKey      = ``
+	selectAll        = ``
+	getPwdByUsername = `SELECT user_id,password FROM api_users WHERE real_name=?`
+)
+
+func (p *Entity) GetPwdByUsername(realname string) (userId, pwd string) {
+	_ = db.Conn(1).QueryRow(getPwdByUsername, realname).Scan(&userId, &pwd)
+	return
+}
 
 func (p *Entity) Insert() (int, error) {
 

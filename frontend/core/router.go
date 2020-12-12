@@ -7,15 +7,11 @@ import (
 	shoppingcart "xframe/frontend/core/shoppingcart/apis"
 	teams "xframe/frontend/core/teams/apis"
 	_ "xframe/frontend/core/tool"
-	user "xframe/frontend/core/user/apis"
+	_ "xframe/frontend/core/user"
 	"xframe/pkg/router"
 )
 
 func init() {
-	// 用户路由
-	g1 := router.New("api", "/api/v1/user")
-	g1.GET("/", "", user.List)
-
 	// 用户订单
 	g2 := router.New("api", "/api/v1/orders")
 	g2.GET("/", "", orders.List)

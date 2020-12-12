@@ -26,12 +26,12 @@ type Token struct {
 }
 
 //创建Claims
-func New(id string, timeOut, refresh int) *YClaims {
+func New(id string, timeOut, refreshTime int) *YClaims {
 	if timeOut <= 0 {
 		timeOut = 3600
 	}
-	if refresh <= 0 {
-		refresh = timeOut / 2
+	if refreshTime <= 0 {
+		refreshTime = timeOut / 2
 	}
 
 	var claims YClaims
@@ -40,7 +40,7 @@ func New(id string, timeOut, refresh int) *YClaims {
 	standardClaims.ExpiresAt = time.Now().Add(time.Second * time.Duration(timeOut)).Unix()
 	standardClaims.IssuedAt = time.Now().Unix()
 
-	claims.RefreshTime = time.Now().Add(time.Second * time.Duration(refresh)).Unix()
+	claims.RefreshTime = time.Now().Add(time.Second * time.Duration(refreshTime)).Unix()
 	claims.StandardClaims = standardClaims
 	return &claims
 }
@@ -81,7 +81,7 @@ func (c *YClaims) CreateToken(encryptKey string) (string, error) {
 }
 
 //验证token
-func VerifyAuthToken(token, encryptKey string) (*Token, error) {
+func VerifyAuthToken(token, encryptKey string, timeOut, refreshTime int) (*Token, error) {
 	mySignKeyBytes, err := base64.URLEncoding.DecodeString(encryptKey) //需要用和加密时同样的方式转化成对应的字节数组
 	if err != nil {
 		return nil, err
@@ -106,7 +106,7 @@ func VerifyAuthToken(token, encryptKey string) (*Token, error) {
 	//判断是否需要刷新
 	if time.Now().Unix() > yjgClaims.RefreshTime {
 		//生成新token
-		newToken, err := New(yjgClaims.StandardClaims.Id, 0, 0).CreateToken(encryptKey)
+		newToken, err := New(yjgClaims.StandardClaims.Id, timeOut, refreshTime).CreateToken(encryptKey)
 		if err == nil {
 			rs.NewToken = newToken
 		}

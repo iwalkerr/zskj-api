@@ -65,7 +65,7 @@ func (s *Server) Static(path string) *Server {
 	tmp, _ := os.Getwd()
 	tmp += "/" + path
 	s.Handler.StaticFS("/static", http.Dir(tmp))
-	s.Handler.StaticFile("/favicon.ico", "./public/resource/favicon.ico")
+	s.Handler.StaticFile("/favicon.ico", "./public/favicon.ico")
 	return s
 }
 

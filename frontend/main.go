@@ -14,7 +14,7 @@ import (
 var g errgroup.Group
 
 func main() {
-	gin.SetMode(gin.DebugMode)
+	gin.SetMode(gin.ReleaseMode)
 
 	// API服务
 	api := server.New("api", config.ServerPort, gin.Recovery(), gin.Logger())

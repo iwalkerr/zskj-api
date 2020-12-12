@@ -1,7 +1,9 @@
 package response
 
 import (
+	"encoding/json"
 	"net/http"
+	"xframe/frontend/common/rsa"
 
 	"github.com/gin-gonic/gin"
 )
@@ -68,8 +70,12 @@ func (resp *ApiResp) Code(code int) *ApiResp {
 }
 
 //设置消息体的数据
-func (resp *ApiResp) Data(data interface{}) *ApiResp {
-	resp.r.Data = data
+func (resp *ApiResp) Data(params ...gin.H) *ApiResp {
+	if len(params) == 0 {
+		resp.r.Data = setNt(resp.c, gin.H{})
+	} else {
+		resp.r.Data = setNt(resp.c, params[0])
+	}
 	return resp
 }
 
@@ -77,4 +83,18 @@ func (resp *ApiResp) Data(data interface{}) *ApiResp {
 func (resp *ApiResp) JSON() {
 	resp.c.JSON(http.StatusOK, resp.r)
 	resp.c.Abort()
+}
+
+//设置刷新token
+func setNt(c *gin.Context, data gin.H) string {
+	data["nt"] = c.GetString("nt")
+	bytes, err := json.Marshal(data)
+	if err != nil {
+		return ""
+	}
+	text, err := rsa.RsaEncrypt(bytes)
+	if err != nil {
+		return ""
+	}
+	return text
 }
