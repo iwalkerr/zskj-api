@@ -222,9 +222,11 @@ func AddSave(c *gin.Context, req *model.AddReq) (int, error) {
 	u.DeptId = req.DeptId
 	u.Remark = req.Remark
 
+	newPassword := gmd5.MustEncryptString(u.LoginName + req.Password)
+
 	//生成密码
 	newSalt := random.GenerateSubId(6)
-	newToken := req.LoginName + req.Password + newSalt
+	newToken := req.LoginName + newPassword + newSalt
 	newToken = gmd5.MustEncryptString(newToken)
 
 	u.Salt = newSalt

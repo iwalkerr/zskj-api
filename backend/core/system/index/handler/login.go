@@ -56,7 +56,7 @@ func CaptchaImage(c *gin.Context) {
 		IsShowNoiseText:    false,
 		IsShowSlimeLine:    false,
 		IsShowSineLine:     false,
-		CaptchaLen:         6,
+		CaptchaLen:         4,
 	}
 	//GenerateCaptcha 第一个参数为空字符串,包会自动在服务器一个随机种子给你产生随机uiid.
 	idKeyC, capC := base64Captcha.GenerateCaptcha("", configC)
