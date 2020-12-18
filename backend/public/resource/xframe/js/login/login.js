@@ -53,6 +53,7 @@ function resultData(result) {
                 time: 3
             });
             $("#code").focus();
+            captcha();
             break;
         default:
             $("#loginName").tips({

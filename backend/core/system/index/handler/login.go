@@ -19,7 +19,7 @@ import (
 type RegisterReq struct {
 	UserName     string `form:"username"  binding:"required,min=1,max=30"`
 	Password     string `form:"password" binding:"required,min=5,max=150"`
-	ValidateCode string `form:"validateCode" binding:"required,min=4,max=10"`
+	ValidateCode string `form:"validateCode" binding:"required,min=1,max=10"`
 	IdKey        string `form:"idkey" binding:"required,min=5,max=30"`
 }
 
