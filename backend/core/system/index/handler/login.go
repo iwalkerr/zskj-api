@@ -42,31 +42,26 @@ func Logout(c *gin.Context) {
 	c.Redirect(302, "/login")
 }
 
+// 定义存储库
+var store = base64Captcha.DefaultMemStore
+
 // 图形验证码
 func CaptchaImage(c *gin.Context) {
-	var configC = base64Captcha.ConfigCharacter{
-		Height: 60,
-		Width:  240,
-		//const CaptchaModeNumber:数字,CaptchaModeAlphabet:字母,CaptchaModeArithmetic:算术,CaptchaModeNumberAlphabet:数字字母混合.
-		Mode:               base64Captcha.CaptchaModeNumber,
-		ComplexOfNoiseText: base64Captcha.CaptchaComplexLower,
-		ComplexOfNoiseDot:  base64Captcha.CaptchaComplexLower,
-		IsShowHollowLine:   false,
-		IsShowNoiseDot:     false,
-		IsShowNoiseText:    false,
-		IsShowSlimeLine:    false,
-		IsShowSineLine:     false,
-		CaptchaLen:         4,
+	// 生成默认数字
+	driver := base64Captcha.DefaultDriverDigit
+	// 生成base64图片
+	cc := base64Captcha.NewCaptcha(driver, store)
+	// 获取
+	id, b64s, err := cc.Generate()
+	if err != nil {
+		log.Println("Register GetCaptchaPhoto get base64Captcha has err:", err)
 	}
-	//GenerateCaptcha 第一个参数为空字符串,包会自动在服务器一个随机种子给你产生随机uiid.
-	idKeyC, capC := base64Captcha.GenerateCaptcha("", configC)
-	//以base64编码
-	base64stringC := base64Captcha.CaptchaWriteToBase64Encoding(capC)
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":  0,
 		"msg":   "操作成功",
-		"data":  base64stringC,
-		"idkey": idKeyC,
+		"data":  b64s,
+		"idkey": id,
 	})
 }
 
@@ -79,8 +74,7 @@ func CheckLogin(c *gin.Context) {
 	}
 
 	// 比对验证码
-	verifyResult := base64Captcha.VerifyCaptcha(req.IdKey, req.ValidateCode)
-	if !verifyResult {
+	if ok := store.Verify(req.IdKey, req.ValidateCode, true); !ok {
 		resp.Error(c).Code(constant.FAIL).Msg("验证码不正确").Write()
 		return
 	}
