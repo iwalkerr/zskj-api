@@ -31,7 +31,7 @@ func main() {
 
 	// 后台管理
 	var store sessions.Store
-	if config.Redis.Status {
+	if config.Admin.RedisStore {
 		store, _ = redis.NewStore(10, "tcp", config.Redis.Host, config.Redis.Password, []byte("secret"))
 	} else {
 		store = memstore.NewStore([]byte("secret"))

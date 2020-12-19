@@ -34,13 +34,13 @@ type config struct {
 type redis struct {
 	Host     string
 	Password string
-	Status   bool
 }
 
 type admin struct {
 	Address      string
 	WebsocketIp  string
 	ServerRoot   string
+	RedisStore   bool
 	BusinessName string
 	CompanyName  string
 }

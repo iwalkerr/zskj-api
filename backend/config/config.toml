@@ -6,6 +6,8 @@ address = ":8080"
 websocketIp = ""
 #后台服务静态资源目录
 serverRoot = "public"
+#redis存储session
+redisStore = true
 #登陆页面展示名称
 businessName = "在上邻里"
 companyName = "四川在上科技有限公司"
@@ -19,8 +21,6 @@ slave = ""
 
 # Redis配置
 [redis]
-# 使用redis存session
-status = true
 # 连接信息
 host = "127.0.0.1:6379"
 password = "123456"

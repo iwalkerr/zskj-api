@@ -87,8 +87,8 @@ func CheckLogin(c *gin.Context) {
 
 	// 验证用户是否被锁
 	if err := service.IsUserLock(req.UserName); err != nil {
-		resp.Error(c).Msg(err.Error()).Write()
 		log.Printf("登陆错误: %s,ip:%s ===> %+v", err.Error(), c.ClientIP(), req)
+		resp.Error(c).Msg(err.Error()).Write()
 		return
 	}
 
