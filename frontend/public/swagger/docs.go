@@ -24,6 +24,39 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/v1/user/getcode": {
+            "post": {
+                "description": "用户通过手机app获取验证码",
+                "consumes": [
+                    "application/x-www-form-urlencoded"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户模块"
+                ],
+                "summary": "APP获取验证码",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "default": "13881887710",
+                        "description": "登陆手机号码",
+                        "name": "phone",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.CommonRes"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/user/login": {
             "post": {
                 "description": "用户通过手机app登陆",
@@ -92,6 +125,14 @@ var doc = `{
                         "default": "12345678",
                         "description": "密码",
                         "name": "password",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "default": "123456",
+                        "description": "手机收取的验证码",
+                        "name": "authCode",
                         "in": "formData",
                         "required": true
                     }

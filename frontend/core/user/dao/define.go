@@ -1,6 +1,9 @@
 package dao
 
-import "time"
+import (
+	"sync"
+	"time"
+)
 
 type Entity struct {
 	UserId      int       `db:"user_id" json:"user_id"`
@@ -9,7 +12,7 @@ type Entity struct {
 	Username    string    `db:"real_name" json:"real_name"`       // 用户唯一名称
 	Password    string    `db:"password" json:"-"`                // 加密密码
 	Signature   string    `db:"signature" json:"signature"`       // 个性签名
-	Sex         string    `db:"sex" json:"sex"`                   // 性别 1男，0女
+	Sex         string    `db:"sex" json:"sex"`                   // 性别 0无， 1男，2女
 	Birthday    string    `db:"birthday" json:"birthday"`         // 生日
 	Phone       string    `db:"phone" json:"phone"`               // 手机号
 	CreateTime  time.Time `db:"created_time" json:"created_time"` // 创建时间
@@ -34,6 +37,13 @@ type Login struct {
 }
 
 type Register struct {
-	Phone    string `form:"phone" binding:"required"`
-	Password string `form:"password" binding:"required,min=8"`
+	Phone    string `form:"phone" binding:"required"`          // 注册手机号码
+	AuthCode string `form:"authCode" binding:"required"`       // 短信收取的验证码
+	Password string `form:"password" binding:"required,min=8"` // 用户登陆密码
+}
+
+// 手机发送验证码
+type PhoneReq struct {
+	Phone string
+	sync.Mutex
 }

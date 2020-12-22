@@ -1,12 +1,30 @@
 package base
 
 import (
+	"regexp"
 	"strconv"
 	"strings"
 	itime "xframe/pkg/utils/time"
 
 	"github.com/Lofanmi/pinyin-golang/pinyin"
 )
+
+const (
+	phoneRegular = "^(13[0-9]|14[57]|15[0-35-9]|18[07-9])\\d{8}$"
+	emailRegular = "^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+"
+)
+
+// 验证电子邮件
+func ValidateEmail(email string) bool {
+	ok, _ := regexp.MatchString(emailRegular, email)
+	return ok
+}
+
+// 验证手机号码的合法性
+func ValidatePhone(mobileNum string) bool {
+	reg := regexp.MustCompile(phoneRegular)
+	return reg.MatchString(mobileNum)
+}
 
 // 动态添加SQL ?号
 func Placeholders(n int) string {

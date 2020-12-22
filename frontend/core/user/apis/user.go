@@ -3,6 +3,7 @@ package apis
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"xframe/frontend/common/response"
 	"xframe/frontend/core/user/dao"
 	userLogic "xframe/frontend/core/user/logic"
@@ -44,6 +45,7 @@ func Login(c *gin.Context) {
 // @Produce json
 // @Param phone formData string true "登陆手机号码" default(13881887710)
 // @Param password formData string true "密码" default(12345678)
+// @Param authCode formData string true "手机收取的验证码" default(123456)
 // @Success 200 {object} response.CommonRes
 // @Router /api/v1/user/register [post]
 func Register(c *gin.Context) {
@@ -53,10 +55,47 @@ func Register(c *gin.Context) {
 		return
 	}
 
-	fmt.Println(req)
+	// TODD: 验证验证码
+	if req.AuthCode != "123456" {
+		response.Error(c).Msg("验证码错误").JSON()
+		return
+	}
+	// 验证手机号码是否存在
+	if ok := userLogic.New().ExistPhone(req.Phone); ok {
+		response.Error(c).Msg("手机号码已存在").JSON()
+		return
+	}
+	// 保存手机号码
+	id, err := userLogic.New().SaveUser(req.Phone, req.Password)
+	if err != nil {
+		response.Error(c).Msg("用户注册失败").JSON()
+		return
+	}
 
+	log.Println("注册成功 ===> ", id)
 	response.Success(c).JSON()
+}
 
+// @Tags 用户模块
+// @Title 获取验证码
+// @Summary APP获取验证码
+// @Description 用户通过手机app获取验证码
+// @Accept x-www-form-urlencoded
+// @Produce json
+// @Param phone formData string true "登陆手机号码" default(13881887710)
+// @Success 200 {object} response.CommonRes
+// @Router /api/v1/user/getcode [post]
+func GetCode(c *gin.Context) {
+	var req dao.PhoneReq
+	if err := c.ShouldBind(&req); err != nil {
+		response.Error(c).Msg("手机格式错误").JSON()
+		return
+	}
+
+	// 验证手机的合法性
+
+	userLogic.New().SendPhoneNote(req.Phone)
+	response.Success(c).JSON()
 }
 
 type QueryParam struct {
